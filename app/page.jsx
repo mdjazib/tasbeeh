@@ -52,7 +52,7 @@ export default function Home() {
       <div key={prevDots.length} className="tasbeeh-holder">
         <div className="tasbeeh-btn">
           <div className="left">{--count}</div>
-          <div className="right">{countN++}</div>
+          <div className="right">{++countN}</div>
         </div>
       </div>
     ]);
