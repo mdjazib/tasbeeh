@@ -153,9 +153,6 @@ body .mob-max-node .tasbeeh .tap-x-node .before-holder .tasbeeh-holder .tasbeeh-
 body .mob-max-node .tasbeeh .tap-x-node .before-holder .tasbeeh-holder .tasbeeh-btn .left {
   display: none;
 }
-body .mob-max-node .tasbeeh .x-reverse {
-  flex-direction: row-reverse !important;
-}
 body .mob-max-node .tasbeeh .x-reverse .before-holder .tasbeeh-holder .tasbeeh-btn .right {
   display: none;
 }
