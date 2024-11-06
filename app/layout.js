@@ -1,14 +1,19 @@
 import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
+const inter = localFont({
+  src: "./fonts/Inter_18pt-Regular.ttf",
+  variable: "--font-inter",
   weight: "100 900",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
+const lancelot = localFont({
+  src: "./fonts/Lancelot-Regular.ttf",
+  variable: "--font-lancelot",
+  weight: "100 900",
+});
+const spartan = localFont({
+  src: "./fonts/LeagueSpartan-Regular.ttf",
+  variable: "--font-spartan",
   weight: "100 900",
 });
 
@@ -20,7 +25,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${inter.variable} ${lancelot.variable} ${spartan.variable}`}>
         {children}
       </body>
     </html>

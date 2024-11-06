@@ -1,0 +1,120 @@
+$inter: var(--font-inter)
+$lancelot: var(--font-lancelot)
+$spartan: var(--font-spartan)
+$body: #1E1E1E
+$white: #fff
+$dimText: #D1D1D1
+// $primary: #FF9D00
+// $primaryBorder: #975D00
+$primary: #00ff9d
+$primaryBorder: #00973c
+$opt: #292929
+$btn: #B9B9B9
+@mixin flex($j,$a,$d,$g)
+    display: flex
+    justify-content: $j
+    align-items: $a
+    flex-direction: $d
+    gap: $g
+*
+    margin: 0
+    padding: 0
+    box-sizing: border-box
+    user-select: none
+body
+    background-color: $body
+    @include flex(center,center,row,0)
+    .mob-max-node
+        background: url("/background.png")
+        background-position: center
+        background-repeat: no-repeat
+        background-size: cover
+        height: 100svh
+        width: 100%
+        max-width: 26rem
+        @include flex(flex-start,flex-start,column,0)
+        .greeting-header
+            width: 100%
+            height: 40svh
+            @include flex(center,center,column,10px)
+            text-align: center
+            padding: 40px
+            h2
+                color: $white
+                font-weight: 100
+                font-family: $spartan
+            p
+                color: $dimText
+                font-family: $inter
+                font-size: 12px
+        .tasbeeh
+            height: 60svh
+            width: 100%
+            @include flex(center,flex-start,row,0)
+            .tap-center-x
+                border: 1px solid $primary
+                padding: 20px
+                border-radius: 100px 100px 0 0
+                border-bottom: 1px solid transparent
+                height: 100%
+                @include flex(flex-start,center,column,20px)
+                .tasbeeh-holder
+                    .tasbeeh-btn
+                        transition: .03s ease
+                        border-radius: 100px
+                        height: 120px
+                        font-family: $lancelot
+                        width: 120px
+                        background-color: $primary
+                        @include flex(center,center,row,0)
+                        color: $body
+                        font-size: 50px
+                .options-holder
+                    @include flex(center,center,column,10%)
+                    height: 100%
+                    .opt-btn
+                        transition: 1s ease
+                        background-color: $opt
+                        padding: 10px
+                        border-radius: 100px
+                        @include flex(center,center,row,0)
+                        svg
+                            fill: none
+                            stroke: $btn
+                            stroke-linejoin: round
+                            stroke-linecap: round
+                            height: 16px
+                            width: 16px
+                            stroke-width: 1px
+            .tap-x-node
+                overflow-x: scroll
+                @include flex(flex-start,center,row,20px)
+                padding: 20px 10px
+                scroll-snap-type: x mandatory
+                height: 170px
+                &::-webkit-scrollbar
+                    height: 0
+                .before-holder
+                    scroll-snap-align: center
+                    min-width: 100%
+                    @include flex(center,center,row,0)
+                    .tasbeeh-holder
+                        .tasbeeh-btn
+                            border-radius: 100px
+                            height: 30px
+                            font-family: $spartan
+                            @include flex(center,center,row,0)
+                            font-size: 8px
+                            width: 30px
+                            background-color: $primary
+                            .left
+                                display: none
+            .x-reverse
+                flex-direction: row-reverse !important
+                .before-holder
+                    .tasbeeh-holder
+                        .tasbeeh-btn
+                            .right
+                                display: none
+                            .left
+                                display: block
