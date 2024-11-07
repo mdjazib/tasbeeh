@@ -77,7 +77,7 @@ export default function Home() {
     }, 1);
   };
   const resetAndSave = () => {
-    if (tasbeehStorage.counts >= 10) {
+    if (tasbeehDots.length >= 10) {
       if (localStorage.history === undefined) {
         localStorage.setItem("history", JSON.stringify([tasbeehStorage]));
       } else {
