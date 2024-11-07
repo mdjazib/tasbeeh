@@ -2,11 +2,16 @@
 import { useRef, useEffect, useState } from "react";
 export default function Home() {
   const [tasbeehDots, setTasbeehDots] = useState([]);
+  const [tasbeehHistory, setTasbeehHistory] = useState([]);
   let [count, setCount] = useState(0);
   let [countN, setCountN] = useState(0);
   const [greeting, setGreeting] = useState("...");
+  const [historyModel, setHistoryModel] = useState("none");
   const [tasbeehStorage, setTasbeehStorage] = useState({});
   const [origin, setOrigin] = useState({});
+  const [tasbeehTotalCounts, setTasbeehTotalCounts] = useState(0);
+  const [tasbeehTotalCountsToday, setTasbeehTotalCountsToday] = useState(0);
+  const [deleteOneFromHistory, setDeleteOneFromHistory] = useState(0);
   const tasbeehDotsRef = useRef(null);
   const tasbeehDotsSecond = useRef(null);
   useEffect(() => {
@@ -57,6 +62,24 @@ export default function Home() {
       </div>
     ]);
   };
+  useEffect(() => {
+    setTasbeehHistory(localStorage.history === undefined ? [] : JSON.parse(localStorage.history).reverse());
+  }, [localStorage.history]);
+  useEffect(() => {
+    const totalCounts = tasbeehHistory.map(tasbeeh => {
+      return tasbeeh.counts;
+    })
+    if (Array.isArray(tasbeehHistory)) {
+      const totalCountsToday = tasbeehHistory.reduce((acc, tasbeeh) => {
+        if (tasbeeh.date === new Date().toDateString()) {
+          return acc + tasbeeh.counts;
+        }
+        return acc;
+      }, 0);
+      setTasbeehTotalCountsToday(totalCountsToday);
+    }
+    setTasbeehTotalCounts(totalCounts.reduce((partialSum, a) => partialSum + a, 0));
+  }, [tasbeehHistory, localStorage.history, setDeleteOneFromHistory]);
   const nextDot = () => {
     addDot();
     if ("vibrate" in navigator) {
@@ -107,9 +130,74 @@ export default function Home() {
       poper.rotate = "0deg"
     }, 100);
   }
+  const clearHistory = () => {
+    navigator.vibrate([100, 50, 50]);
+    setTimeout(() => {
+      const ask = confirm("Warning: Deleting all history is irreversible. Proceed?");
+      if (ask) {
+        localStorage.removeItem("history");
+        setHistoryModel("none");
+      }
+    }, 1);
+  }
+  const removeOneFromHistory = (e) => {
+    setDeleteOneFromHistory(e);
+    const history = JSON.parse(localStorage.history);
+    const deleteFrom = history.map((a) => { return a.id }).indexOf(e);
+    history.splice(deleteFrom, 1);
+    localStorage.setItem("history", JSON.stringify(history));
+  }
   return (
     <>
       <div className="mob-max-node">
+        <div className={`history-parent ${historyModel}`} >
+          <div className="header-node">
+            <svg viewBox="0 0 24 24" onClick={() => { setHistoryModel("none") }}>
+              <path d="M19 12H5" />
+              <path d="M12 19L5 12L12 5" />
+            </svg>
+            <h2>Tasbeeh History</h2>
+            <svg viewBox="0 0 24 24" onClick={() => { clearHistory() }}>
+              <path d="M18 6L6 18" />
+              <path d="M6 6L18 18" />
+            </svg>
+          </div>
+          <div className="metrics">
+            <div className="row">
+              <div className="col">
+                <h3>{tasbeehHistory.length}</h3>
+                <p>Records</p>
+              </div>
+              <div className="col">
+                <h3>{tasbeehTotalCounts}</h3>
+                <p>Counts</p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col">
+                <h3>{tasbeehTotalCountsToday}</h3>
+                <p>{`Today's`} total counts</p>
+              </div>
+            </div>
+          </div>
+          <div className="scroll-view-y">
+            {
+              Array.isArray(tasbeehHistory) && tasbeehHistory.map((tasbeeh, index) => (
+                <div className="row-crow" key={index}>
+                  <h3>{tasbeeh.counts}</h3>
+                  <div className="data-set">
+                    <p>{tasbeeh.date}</p>
+                    <p>{tasbeeh.start} - {tasbeeh.end}</p>
+                  </div>
+                  <svg viewBox="0 0 24 24" onClick={() => { removeOneFromHistory(tasbeeh.id) }}>
+                    <path d="M18 6L6 18" />
+                    <path d="M6 6L18 18" />
+                  </svg>
+                </div>
+              ))
+            }
+          </div>
+        </div>
         <div className="greeting-header">
           <h2>Tasbeeh</h2>
           <p>{greeting}</p>
@@ -137,7 +225,7 @@ export default function Home() {
                   <path d="M17.0749 7.49998C16.6523 6.30564 15.934 5.23782 14.987 4.39616C14.0401 3.55451 12.8954 2.96645 11.6597 2.68686C10.424 2.40727 9.13762 2.44527 7.92059 2.79729C6.70356 3.14932 5.59554 3.80391 4.69992 4.69998L0.833252 8.33331M19.1666 11.6666L15.2999 15.3C14.4043 16.1961 13.2963 16.8506 12.0792 17.2027C10.8622 17.5547 9.57584 17.5927 8.34016 17.3131C7.10447 17.0335 5.95975 16.4455 5.01281 15.6038C4.06586 14.7621 3.34756 13.6943 2.92492 12.5" />
                 </svg>
               </div>
-              <div className="opt-btn">
+              <div className="opt-btn" onClick={() => { setHistoryModel("default") }}>
                 <svg viewBox="0 0 20 20" >
                   <path d="M0.833252 3.33337V8.33337H5.83325" />
                   <path d="M2.92492 12.5C3.46525 14.0337 4.48936 15.3502 5.84297 16.2512C7.19657 17.1522 8.80632 17.5889 10.4297 17.4954C12.053 17.402 13.6021 16.7835 14.8434 15.7332C16.0846 14.6828 16.951 13.2575 17.3118 11.672C17.6726 10.0865 17.5083 8.42667 16.8438 6.94262C16.1792 5.45857 15.0504 4.2307 13.6273 3.44401C12.2042 2.65732 10.564 2.35442 8.95382 2.58097C7.34363 2.80751 5.85068 3.55122 4.69992 4.70004L0.833252 8.33337" />
